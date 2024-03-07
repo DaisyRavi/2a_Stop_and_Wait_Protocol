@@ -9,41 +9,39 @@ To write a python program to perform stop and wait protocol
 5. If your frames reach the server it will send ACK signal to client
 6. Stop the Program
 ## PROGRAM
-
+## Client :
 ```
-import time
-
-def send_frame(frame):
-    print(f"Sending frame: {frame}")
-    time.sleep(1)  # Simulating transmission time
-    return True
-
-def receive_ack():
-    time.sleep(1)  # Simulating transmission time
-    return True
-
-def stop_and_wait_protocol(frame_size):
-    for frame_number in range(frame_size):
-        frame = f"Frame {frame_number}"
-        while not send_frame(frame):
-            print("Timeout occurred. Resending frame.")
-        print(f"Frame {frame_number} sent successfully.")
-
-        ack_received = receive_ack()
-        while not ack_received:
-            print("Timeout occurred. Resending frame.")
-            ack_received = receive_ack()
-
-        print(f"Acknowledgment received for Frame {frame_number}.\n")
-
-    print("Data transmission completed.")
-
-if _name_ == "_main_":
-    frame_size = int(input("Enter the frame size: "))
-    stop_and_wait_protocol(frame_size)
+import socket
+s=socket.socket()
+s.bind(('localhost',8000))
+s.listen(5)
+c,addr=s.accept()
+while True:
+    i=input("Enter a data: ")
+    c.send(i.encode())
+    ack=c.recv(1024).decode()
+    if ack:
+        print(ack)
+        continue
+    else:
+        c.close()
+        break
 ```
-## OUTPUT
+## Server:
+```
+import socket
+s=socket.socket()
+s.connect(('localhost',8000))
+while True:
+ print(s.recv(1024).decode())
+ s.send("Acknowledgement Recived".encode())
+```
+## OUTPUT:
+## Client Output:
+![Client](https://github.com/DaisyRavi/2a_Stop_and_Wait_Protocol/assets/151394386/9e99ea0a-b99b-4bc6-81eb-90109e577602)
 
-
-## RESULT
+## Server Output:
+![Server (2)](https://github.com/DaisyRavi/2a_Stop_and_Wait_Protocol/assets/151394386/8a0e6ad0-9849-4565-b761-e66e7efd91da)
+![Screenshot 2024-03-07 170527](https://github.com/DaisyRavi/2a_Stop_and_Wait_Protocol/assets/151394386/738bf0e1-7042-4e7e-92ee-2d04be8b3e4c)
+## RESULT:
 Thus, python program to perform stop and wait protocol was successfully executed.
